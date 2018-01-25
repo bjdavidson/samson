@@ -32,6 +32,8 @@ module SamsonGcloud
 end
 
 Samson::Hooks.view :project_form_checkbox, "samson_gcloud/project_form_checkbox"
+Samson::Hooks.view :stage_form_checkbox, "samson_gcloud/stage_form_checkbox"
+Samson::Hooks.view :build_show, "samson_gcloud/build_show"
 
 Samson::Hooks.callback :after_deploy do |deploy, _|
   SamsonGcloud::ImageTagger.tag(deploy) if ENV['GCLOUD_IMAGE_TAGGER'] == 'true'
@@ -39,4 +41,25 @@ end
 
 Samson::Hooks.callback :project_permitted_params do
   :build_with_gcb
+end
+
+Samson::Hooks.callback :ensure_build_is_successful do |build, job, output|
+  if ENV['GCLOUD_IMAGE_SCANNER']
+    SamsonGcloud::ImageScanner.scan!(build)
+    success, message = case build.gcr_vulnerabilities_status
+    when 0
+      [false, "Vulnerability scan is still running, see #{SamsonGcloud::ImageScanner.result_url(build)}"]
+    when 1
+      [false, "Vulnerabilities found, see #{SamsonGcloud::ImageScanner.result_url(build)}"]
+    when 2
+      [true, "No vulnerabilities found"]
+    else raise
+    end
+
+    if success || !job.deploy.stage.block_on_gcr_vulnerabilities
+      output.puts message
+    else
+      raise Samson::Hooks::UserError, message
+    end
+  end
 end

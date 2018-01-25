@@ -11,6 +11,11 @@ Images will be built using `gcloud container build submit`, which can be slow fo
 If the file upload takes too long or you have a custom cloudbuild.yaml, use build triggers instead and
 notify samson of the finished builds via the build api.
 
+## Image scanning
+
+Scan all GCR builds for vulnerabilities. They are displayed on the build page.
+If the stage opts in to "Block deploy of vulnerable images", then deploys will fail.
+
 ## Setup
 
  - enable [cloudbuild api](https://console.cloud.google.com/apis/api/cloudbuild.googleapis.com/overview)
@@ -25,3 +30,4 @@ notify samson of the finished builds via the build api.
   - `GCLOUD_ACCOUNT` - account to use
   - `GCLOUD_OPTIONS` - additional commandline options
   - `GCLOUD_IMAGE_TAGGER` - set to `true` to enable tagging on deploy
+  - `GCLOUD_IMAGE_SCANNER` - set to `true` to enable build scanning 

@@ -1,0 +1,11 @@
+<% if ENV['GCLOUD_IMAGE_SCANNER'] %>
+  <% case @build.gcr_vulnerabilities_status %>
+  <% when 0 %>
+    Waiting for scan
+  <% when 1 %>
+    Vulnerabilities found.
+  <% when 2 %>
+    No vulnerabilities found.
+  <% else raise %>
+  <% end %>
+<% end %>

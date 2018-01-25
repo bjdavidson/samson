@@ -1,0 +1,3 @@
+<% if ENV['GCLOUD_IMAGE_SCANNER'] %>
+  <%= form.input :block_on_gcr_vulnerabilities, label: 'Block deploy when using vulnerable GCR images', as: :check_box %>
+<% end %>

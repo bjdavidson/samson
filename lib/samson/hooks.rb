@@ -7,6 +7,7 @@ module Samson
     VIEW_HOOKS = [
       :stage_form,
       :stage_show,
+      :stage_form_checkbox,
       :project_form,
       :project_form_checkbox,
       :build_new,
@@ -39,6 +40,7 @@ module Samson
       :before_docker_repository_usage,
       :before_docker_build,
       :after_docker_build,
+      :ensure_build_is_successful,
       :after_job_execution,
       :job_additional_vars,
       :buildkite_release_params,

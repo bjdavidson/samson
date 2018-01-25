@@ -5,6 +5,7 @@
         label: "Notify after deploy",
         help: "Email addresses to notify of finished deploys, separated by <code>;</code>".html_safe
   %>
+  <%= Samson::Hooks.render_views(:stage_form_checkbox, self, form: form) %>
 
   <% if DeployGroup.enabled? %>
     <%= render 'deploy_groups/deploy_group_select', form: form %>
